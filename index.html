@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+
+    <title>FaceSmash</title>
+  </head>
+  <body class="bg-dark container">
+     <h1 style="text-align: center; color: aliceblue;" class="m-2" ><strong>Face</strong>Smash</h1>
+     <hr class="bg-light">
+    <br>
+    <h4 id="info" style="text-align: center;color:aliceblue;display:none">Click to Choose (Gallery shows the rank)</h4>
+
+    <h3 id="start" style="text-align: center;color: #d9534f;font-weight: bold;cursor: pointer" onclick="showHide()">Start</h5>
+
+    <div id="block" style="display: none; justify-content: center;align-items: center;height: 80vh;">
+      <img src="./assets/1.jpg" id="left" style="height: 500px;width: 450px;cursor: pointer;" onclick="chooseL()">
+      <div id="rankPage" class="m-2" style="border: 1px solid black;width: 150px;height: 450px;overflow:auto"></div>
+      <img src="./assets/2.jpg" id="right" style="height: 500px;width: 450px;cursor: pointer;" onclick="chooseR()">
+
+      </div>
+    </div>
+      
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+    <script>
+      
+      let rank = {
+        1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0, 20: 0, 21: 0
+      }
+      const total = 83
+      const sound = new Audio('./assets/effect.wav')
+      const block = document.getElementById('block')
+      const start = document.getElementById('start')
+      const rankPage = document.getElementById('rankPage')
+      const info = document.getElementById('info')
+      const photos = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,22,23,24,25,26,27,28,29,30,31,32,33,34,35,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83]
+
+      function getRandomInt(min, max) {
+          min = Math.ceil(min);
+          max = Math.floor(max);
+          return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      function points() {
+        let list = []
+        let i=1
+        while (i <= max1) {
+          list.push(rank[i])
+          i++
+        }
+        return list
+      }
+
+      function arrange() {
+        let removingItem = null
+        let list = []
+        let compete = [...photos]
+        let object = {...rank}
+        while (compete.length > 0) {
+          removingItem = parseInt(maxKey(object))
+          delete object[removingItem]
+          compete.splice(compete.indexOf(removingItem), 1)
+          list.push(removingItem)
+          continue
+        }
+        list = clean(list)
+
+        for (let i in photos) {
+          if (!list.includes(photos[i])) {
+            list.push(photos[i])
+          }
+        }
+
+        console.log(list)
+        return list
+      }
+
+
+      function showHide() {
+        sound.play()
+        block.style.display="flex"
+        start.style.display="none"
+        info.style.display="block"
+        let image1 = getRandomInt(1,total)
+        let image2 = null
+        {while (true) { image2 = getRandomInt(1,total); if (image2==image1) {continue} else {break} }}
+        document.getElementById('left').setAttribute('src', `./assets/${image1}.jpg`)
+        document.getElementById('right').setAttribute('src', `./assets/${image2}.jpg`)
+
+        let i=1
+        while (i<=total) {
+          let element = document.createElement('IMG')
+          element.setAttribute('id', 'imges')
+          element.setAttribute('class', 'm-1')
+          element.setAttribute('width', '120px')
+          element.setAttribute('height', '140px')
+          element.setAttribute('src', `./assets/${i}.jpg`)
+
+          rankPage.appendChild(element)
+          i++
+        }
+      }
+
+      function maxKey(ob) {
+        let chars = ob
+        let max = 0;
+        let maxKey = "";
+
+        for(let char in chars){
+          if(chars[char]> max){
+            max = chars[char];
+            maxKey= char
+            continue
+          }
+        }
+        return maxKey 
+      }
+
+      function clean(array) {
+        let list = []
+        for (let i in array) {
+          if (!isNaN(array[i])) {
+            list.push(array[i])
+          }
+        }
+        return list
+      }
+
+      function chooseL() {
+        sound.play()
+        let path = document.getElementById('left').getAttribute('src').split('')
+        path.splice(0,9)
+        path = path.join('')
+
+        let index = parseInt(path)
+        rank[index]++
+        console.log(index, rank, path)
+
+        let image1 = getRandomInt(1,total)
+        let image2 = null
+        {while (true) { image2 = getRandomInt(1,total); if (image2==image1) {continue} else {break} }}
+        
+        document.getElementById('left').setAttribute('src', `./assets/${image1}.jpg`)
+        document.getElementById('right').setAttribute('src', `./assets/${image2}.jpg`)
+
+        for (let i in photos) {
+          document.getElementById('imges').remove()
+        }
+        const arrangedRank = arrange()
+        for (let j in arrangedRank) {
+          let rankedImages = arrangedRank[j]
+          let element = document.createElement('IMG')
+          element.setAttribute('id', 'imges')
+          element.setAttribute('class', 'm-1')
+          element.setAttribute('width', '120px')
+          element.setAttribute('height', '140px')
+          element.setAttribute('src', `./assets/${rankedImages}.jpg`)
+          rankPage.appendChild(element)
+        }
+      }
+
+      function chooseR() {
+        sound.play()
+        let path = document.getElementById('right').getAttribute('src').split('')
+        path.splice(0,9)
+        path = path.join('')
+      
+        let index = parseInt(path)
+        rank[index]++
+        console.log(index, rank)
+
+        let image1 = getRandomInt(1,total)
+        let image2 = null
+        {while (true) { image2 = getRandomInt(1,total); if (image2==image1) {continue} else {break} }}
+        
+        document.getElementById('left').setAttribute('src', `./assets/${image1}.jpg`)
+        document.getElementById('right').setAttribute('src', `./assets/${image2}.jpg`)
+
+        for (let i in photos) {
+          document.getElementById('imges').remove()
+        }
+        const arrangedRank = arrange()
+        for (let j in arrangedRank) {
+          let rankedImages = arrangedRank[j]
+          let element = document.createElement('IMG')
+          element.setAttribute('id', 'imges')
+          element.setAttribute('class', 'm-1')
+          element.setAttribute('width', '120px')
+          element.setAttribute('height', '140px')
+          element.setAttribute('src', `./assets/${rankedImages}.jpg`)
+          rankPage.appendChild(element)
+        }
+      }
+
+    </script>
+  </body>
+</html>
